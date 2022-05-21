@@ -1,0 +1,77 @@
+/*
+
+Vamos a crear la base de datos y la llamamos: crmMatriculas
+
+*/
+
+Create DataBase CrmMatriculas;
+
+/*
+Ahora creamos las tablas
+*/
+
+
+
+
+	
+Create Table TblDepartamento (
+	Id_departamento Int Unsigned Auto_Increment Primary key,
+	Nombre VarChar(50) Not Null
+);
+
+Create Table TblPersona (
+	Id_persona Int Unsigned Auto_Increment Primary Key,
+	Nif VarChar(50) Unique Not Null,
+	Nombre VarChar(30) Not Null,
+	Apellido1 Varchar(15) Not Null,
+	Apellido2 Varchar(15),
+	Ciudad Varchar(30) Not Null,
+	Direccion Varchar(50) Not Null,
+	Telefono Varchar(20) Not Null,
+	Fecha_Nacimiento Date Not Null,
+	Sexo Enum('H','M') Not Null,
+	Tipo Enum('profesor', 'alumno') Not Null,
+	Clave VarChar(10)  
+);
+
+Create Table TblProfesor (
+	Id_Persona Int Unsigned Primary Key,
+	Id_departamento Int Unsigned Not Null,
+	Foreign Key(Id_departamento)
+		References TblDepartamento(Id_departamento)
+);
+
+Create Table TblGrado (
+	Id_grado Int Unsigned Auto_Increment Primary Key,
+	Nombre VarChar(50) Unique Not Null
+);
+
+Create Table TblAsignatura (
+	Id_Asignatura Int Unsigned Auto_Increment Primary Key,
+	Nombre Varchar(50) Unique Not Null,
+	Creditos Int Not Null,
+	Tipo Enum('basica', 'institucional', 'avanzada') Not Null,
+	Curso Tinyint Unsigned Not Null,
+	Cuatrimestre Tinyint Unsigned Not Null,
+	Id_Persona Int Unsigned Not Null,
+	Id_grado Int Unsigned Not Null,
+	Foreign Key(Id_Persona) References TblPersona(Id_Persona),
+	Foreign Key(Id_grado) References TblGrado(Id_Grado)
+);
+
+Create Table TblCurso_Escolar(
+	Id_curso_escolar Int Unsigned Auto_Increment Not Null
+		Primary key,
+	Ano_inicio Year Not Null,
+	Ano_fin Year
+);
+
+Create Table TblAlumno_Alumno (
+	Id_persona Int Unsigned Not Null,
+	Id_asignatura Int Unsigned Not Null,
+	Id_curso_escolar Int Unsigned Not Null,
+	Primary Key(Id_persona, Id_asignatura, Id_curso_escolar),
+	Foreign  Key (Id_persona) References TblPersona(Id_persona),    
+	Foreign Key(Id_asignatura) References TblAsignatura(Id_asignatura),
+	Foreign Key(Id_curso_escolar) References 							TblCurso_Escolar(Id_curso_escolar)
+); 
